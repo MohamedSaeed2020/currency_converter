@@ -95,19 +95,22 @@ abstract class AppStyles {
   ///***********  History Screen Styles  *****************//
 
   static final whiteColor10spw700NotoSans = TextStyle(
-      color: AppColors.whiteColor,
-      fontFamily: notoSansFontFamily,
-      fontWeight: FontWeight.bold,
-      fontSize: 10.sp);
+    color: AppColors.whiteColor,
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+    fontFamily: notoSansFontFamily,
+  );
 
   static final mainHeadlineColor14spw700Poppins = TextStyle(
-      color: AppColors.mainHeadlineBlackColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 14.sp);
+    color: AppColors.mainHeadlineBlackColor,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+  );
 
   static final mainGrayColor14spw700NotoSans = TextStyle(
-      color: AppColors.greyColor,
-      fontFamily: notoSansFontFamily,
-      fontWeight: FontWeight.bold,
-      fontSize: 14.sp);
+    color: AppColors.greyColor,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+    fontFamily: notoSansFontFamily,
+  );
 }

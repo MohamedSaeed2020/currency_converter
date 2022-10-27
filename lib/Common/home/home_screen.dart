@@ -1,10 +1,10 @@
+import 'package:calculator_converter/Common/home/widgets/bottom_nav_bar/bottom_navigation_bar.dart';
 import 'package:calculator_converter/Config/colors.dart';
 import 'package:calculator_converter/Features/currency_converter/presentation/controllers/converter/converter_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/presentation/controllers/home/home_cubit.dart';
-import 'package:calculator_converter/Features/currency_converter/presentation/screens/common/error_screen.dart';
-import 'package:calculator_converter/Features/currency_converter/presentation/screens/common/loading_indicator.dart';
-import 'package:calculator_converter/Features/currency_converter/presentation/screens/home/widgets/bottom_nav_bar/bottom_navigation_bar.dart';
 import 'package:calculator_converter/Utils/home_nav_screens_data_utility.dart';
+import 'package:calculator_converter/common/error_screen.dart';
+import 'package:calculator_converter/common/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

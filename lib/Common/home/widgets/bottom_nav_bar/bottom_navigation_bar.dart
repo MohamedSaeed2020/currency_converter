@@ -1,5 +1,5 @@
+import 'package:calculator_converter/Common/home/widgets/bottom_nav_bar/bottom_bar_item.dart';
 import 'package:calculator_converter/Config/colors.dart';
-import 'package:calculator_converter/Features/currency_converter/presentation/screens/home/widgets/bottom_nav_bar/bottom_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

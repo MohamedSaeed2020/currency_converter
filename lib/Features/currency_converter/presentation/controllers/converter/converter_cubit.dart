@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'package:calculator_converter/Cores/Helpers/extensions/math_extensions.dart';
 import 'package:calculator_converter/Cores/services/hive_service.dart';
+import 'package:calculator_converter/Cores/services/navigation/service.dart';
 import 'package:calculator_converter/Cores/services/services_locator.dart';
 import 'package:calculator_converter/Cores/use_case/base_use_case.dart';
+import 'package:calculator_converter/Features/conversion_history/presentation/controllers/conversion_history_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/entities/currency.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/use_cases/all_countries_currencies_use_case.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/use_cases/currencies_conversion_use_case.dart';
@@ -122,9 +124,16 @@ class ConverterCubit extends Cubit<ConverterState> {
         conversionsValues.addAll(conversion.conversionsValues);
         _conversionValueController
             .add(conversionsValues.first * typedConversionValue);
+        await getConversionHistory();
         log('convertCurrencies allCurrencies: ${conversion.conversionsValues.first}');
       },
     );
+  }
+
+  Future<void> getConversionHistory() async {
+    ConversionHistoryCubit conversionHistoryCubit = ConversionHistoryCubit.get(
+        NavigationService.navigationKey.currentContext);
+    await conversionHistoryCubit.getConversionsHistory();
   }
 
   Future<void> refreshFromConversionValueWithIndex(int value) async {

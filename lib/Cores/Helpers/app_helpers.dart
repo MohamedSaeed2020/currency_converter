@@ -1,4 +1,5 @@
 import 'package:calculator_converter/Config/colors.dart';
+import 'package:calculator_converter/Cores/Helpers/extensions/date_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,11 +13,16 @@ class AppHelpers {
     ]);
   }
 
-
   static void makeStatusBarColorTransparent() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: AppColors.transparentColor,
     ));
+  }
+
+  static String subtractDates(int numberOfDays) {
+    return (DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day - numberOfDays))
+        .formatDate();
   }
 
   static showSnackBar(String message, String status) {

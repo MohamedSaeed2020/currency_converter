@@ -1,6 +1,8 @@
+import 'package:calculator_converter/Common/home/home_screen.dart';
 import 'package:calculator_converter/Cores/services/navigation/routes.dart';
 import 'package:calculator_converter/Cores/services/navigation/service.dart';
 import 'package:calculator_converter/Cores/services/services_locator.dart';
+import 'package:calculator_converter/Features/conversion_history/presentation/controllers/conversion_history_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/presentation/controllers/converter/converter_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/presentation/controllers/converter/currency_selection_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/presentation/controllers/home/home_cubit.dart';
@@ -29,6 +31,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => locator<CurrencySelectionCubit>(),
           ),
+          BlocProvider(
+            create: (context) => locator<ConversionHistoryCubit>(),
+          ),
         ],
         child: GetMaterialApp(
           title: AppStrings.appName,
@@ -46,7 +51,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             fontFamily: fontFamily,
           ),
-          initialRoute: NavigationRoutes.home,
+          home: const HomeScreen(),
           onGenerateRoute: generateRoute,
         ),
       );

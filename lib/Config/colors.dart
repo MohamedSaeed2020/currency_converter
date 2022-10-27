@@ -11,6 +11,6 @@ class AppColors {
   static const mainHeadlineBlackColor = Color(0xff101820);
   static const blueGrayColor = Color(0xffe4f0ed);
   static const mainBackgroundColor = Color(0xffd5efdd);
-
-
+  static const mainDividerBackColor = Color(0xfff5f5f5);
+  static const mainGreenColor = Color(0xff05868e);
 }

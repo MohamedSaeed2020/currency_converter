@@ -1,4 +1,4 @@
-import 'package:calculator_converter/Features/currency_converter/presentation/screens/home/home_screen.dart';
+import 'package:calculator_converter/Common/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavigationRoutes {
