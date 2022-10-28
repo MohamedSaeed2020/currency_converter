@@ -62,16 +62,16 @@ class ConverterCubit extends Cubit<ConverterState> {
 
   Future<void> _checkIsCurrencyCached() async {
     if (locator<HiveService>().checkDateIsCached(currentDate)) {
-      log('Cached');
+      log('Currencies Cached');
       final cachedCurrenciesData =
           locator<HiveService>().fetchCachedCurrenciesWithDate(currentDate);
       cachedCurrenciesData.forEach(currencies.add);
     } else {
-      log('Online');
+      log('Currencies Online');
       await getAllCurrencies();
     }
     _addDefaultValuesToControllers();
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   Future<void> getAllCurrencies() async {
@@ -84,6 +84,7 @@ class ConverterCubit extends Cubit<ConverterState> {
         currencies.addAll(currency.results.values);
         await locator<HiveService>()
             .storeCachedCurrenciesWithDate(currentDate, currencies);
+        locator<HiveService>().primitiveBox.put('saved_data',DateTime.now());
         log('getAllCurrencies allCurrencies: ${currencies.first.id}');
       },
     );
@@ -107,7 +108,7 @@ class ConverterCubit extends Cubit<ConverterState> {
     _typedConversionValueController.add(1);
   }
 
-  Future<void> convertCurrencies() async {
+  Future<void> convertCurrencies({bool isFirstTimeCall=false}) async {
     final result = await currenciesConversionUseCase(
       ConversionData(
         fromConversionValue.currencyId,
@@ -118,22 +119,39 @@ class ConverterCubit extends Cubit<ConverterState> {
 
     result.fold(
       (failure) {
+        emit(CurrencyError());
         log('convertCurrencies failure: ${failure.errorMessage}');
       },
       (conversion) async {
         conversionsValues.addAll(conversion.conversionsValues);
         _conversionValueController
             .add(conversionsValues.first * typedConversionValue);
-        await getConversionHistory();
+        if(isFirstTimeCall){
+          log('FirstTime');
+          locator<HiveService>().primitiveBox.put('default_conversion',conversionsValues.first);
+        }
         log('convertCurrencies allCurrencies: ${conversion.conversionsValues.first}');
       },
     );
+    await getConversionHistory();
+
+  }
+
+  Future<void> checkIfDefaultConversionValueCached() async {
+    if(locator<HiveService>().primitiveBox.containsKey('default_conversion')){
+      _conversionValueController
+          .add(locator<HiveService>().primitiveBox.get('default_conversion') * typedConversionValue);
+      await getConversionHistory();
+    }else{
+      convertCurrencies(isFirstTimeCall: true);
+    }
+
   }
 
   Future<void> getConversionHistory() async {
     ConversionHistoryCubit conversionHistoryCubit = ConversionHistoryCubit.get(
         NavigationService.navigationKey.currentContext);
-    await conversionHistoryCubit.getConversionsHistory();
+    await conversionHistoryCubit.onInit();
   }
 
   Future<void> refreshFromConversionValueWithIndex(int value) async {
@@ -203,6 +221,7 @@ class ConverterCubit extends Cubit<ConverterState> {
     locator<HiveService>().close();
     return super.close();
   }
+
 }
 
 ///Extension Methods

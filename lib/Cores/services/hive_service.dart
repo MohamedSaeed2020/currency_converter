@@ -4,7 +4,8 @@ import 'package:path_provider/path_provider.dart';
 
 class HiveService {
   late Box currencyBox;
-  late Box currencyHistoryBox;
+  late Box primitiveBox;
+  //late Box currencyHistoryBox;
 
   Future<void> initHiveService() async {
     // getting application document directory
@@ -17,19 +18,16 @@ class HiveService {
     // register CurrencyAdapter component
     Hive.registerAdapter(CurrencyAdapter());
 
-    // register CurrencyHistoryAdapter component
-    //Hive.registerAdapter(CurrencyHistoryAdapter());
-
     // opening Currency Box component
     currencyBox = await Hive.openBox('currency_view_box');
+    primitiveBox = await Hive.openBox('primitive_view_box');
 
-    //opening CurrencyConversionHistoryBox component
-    //currencyHistoryBox = await Hive.openBox('currency_history_box');
   }
 
   Future<void> storeCachedCurrenciesWithDate(
-      String date, List<Currency?>? value) async {
-    currencyBox.clear();
+    String date,
+    List<Currency?>? value,
+  ) async {
     await currencyBox.put(date, value);
   }
 
@@ -38,17 +36,17 @@ class HiveService {
 
   bool checkDateIsCached(String date) => currencyBox.containsKey(date);
 
-/*  Future<void> storeCurrenciesToHistoryWithKey(
-          List<CurrencyHistoryModel?>? value) async =>
-      await currencyHistoryViewBox.put('history', value);*/
+  clearAllBoxesData() {
+    currencyBox.clear();
+    primitiveBox.clear();
+  }
 
-/*  fetchCurrenciesHistoryWithKey() => currencyHistoryViewBox
-      .get('history', defaultValue: <CurrencyHistoryModel>[]);*/
+  fetchCurrenciesHistoryWithKey(String key) {
+    return primitiveBox.get(key, defaultValue: []);
+  }
 
-/*  bool checkHistoryIsNotEmpty() =>
-      currencyHistoryViewBox.containsKey('history');*/
+  bool checkHistoryIsNotEmpty(String key) => primitiveBox.containsKey(key);
 
-  //Closing Hive Service
   void close() {
     Hive.close();
   }

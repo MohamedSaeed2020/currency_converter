@@ -1,5 +1,8 @@
+import 'dart:developer';
 import 'package:calculator_converter/Config/colors.dart';
 import 'package:calculator_converter/Cores/Helpers/extensions/date_extensions.dart';
+import 'package:calculator_converter/Cores/services/hive_service.dart';
+import 'package:calculator_converter/Cores/services/services_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,6 +26,20 @@ class AppHelpers {
     return (DateTime(DateTime.now().year, DateTime.now().month,
             DateTime.now().day - numberOfDays))
         .formatDate();
+  }
+
+  static void checkTimeToDeleteCachedData() {
+    log('Cached Start Time: ${locator<HiveService>().primitiveBox.get('saved_data')}');
+    if (locator<HiveService>().primitiveBox.get('saved_data') != null) {
+      int elapsedMinutes = DateTime.now()
+          .difference(locator<HiveService>().primitiveBox.get('saved_data'))
+          .inMinutes;
+      log('remainingMinutes: $elapsedMinutes');
+      if (elapsedMinutes >= 60) {
+        log('History Deleted');
+        locator<HiveService>().clearAllBoxesData();
+      }
+    }
   }
 
   static showSnackBar(String message, String status) {

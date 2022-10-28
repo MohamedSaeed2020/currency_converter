@@ -7,10 +7,12 @@ class ConversionHistoryInitial extends ConversionHistoryState {}
 class ConversionHistoryLoading extends ConversionHistoryState {}
 
 class ConversionHistoryLoaded extends ConversionHistoryState {
-  final ConversionHistoryData conversionHistory;
+  final List<num> conversionValuesHistory;
+  final List<String> conversionDatesHistory;
 
   ConversionHistoryLoaded(
-    this.conversionHistory,
+    this.conversionValuesHistory,
+    this.conversionDatesHistory,
   );
 }
 

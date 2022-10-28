@@ -48,15 +48,16 @@ class ConversionHistoryScreen extends StatelessWidget {
                                 child: ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.conversionHistory
-                                      .conversionsDates.length,
+                                  itemCount: state.conversionDatesHistory.length
+                                      ,
                                   itemBuilder: (context, index) {
                                     return Padding(
                                       padding: EdgeInsets.only(
                                           top: 1.h, bottom: 1.h),
                                       child: CurrencyHistoryItem(
                                         conversionHistoryDate:
-                                            state.conversionHistory,
+                                            state.conversionDatesHistory,
+                                        conversionHistoryValues: state.conversionValuesHistory,
                                         index: index,
                                       ),
                                     );

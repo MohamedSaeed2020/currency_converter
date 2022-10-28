@@ -12,6 +12,7 @@ class AppConfigs {
     ServicesLocator.init();
     await locator<HiveService>().initHiveService();
     DioHelper.init();
+    AppHelpers.checkTimeToDeleteCachedData();
     AppHelpers.makeAppInPortraitModeOnly();
     AppHelpers.makeStatusBarColorTransparent();
     runApp(const MyApp());

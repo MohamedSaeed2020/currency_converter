@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:calculator_converter/Cores/Helpers/app_helpers.dart';
 import 'package:calculator_converter/Cores/Helpers/extensions/date_extensions.dart';
 import 'package:calculator_converter/Cores/network/api_constants.dart';
@@ -31,7 +29,6 @@ class RemoteConversionsHistoryDataSource
       },
     );
 
-    log('after');
     if (response.statusCode == 200) {
       return ConversionHistoryModel.fromJson(response.data);
     } else {

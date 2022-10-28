@@ -10,4 +10,6 @@ class ConversionHistory extends Equatable {
 
   @override
   List<Object> get props => [countriesConversionsIds, conversionsHistoryData];
+
+
 }
