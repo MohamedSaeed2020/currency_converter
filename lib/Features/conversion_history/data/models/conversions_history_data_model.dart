@@ -12,4 +12,6 @@ class ConversionHistoryDataModel extends ConversionHistoryData {
       conversionsValues: List<num>.from(json.values),
     );
   }
+
+
 }

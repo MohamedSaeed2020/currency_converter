@@ -9,13 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class CurrencyHistoryItem extends StatelessWidget {
-  final ConversionHistoryData conversionHistoryDate;
+  final List<String> conversionHistoryDate;
+  final List<num> conversionHistoryValues;
   final int index;
 
   const CurrencyHistoryItem({
     Key? key,
     required this.conversionHistoryDate,
-    required this.index,
+    required this.index, required this.conversionHistoryValues,
   }) : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ class CurrencyHistoryItem extends StatelessWidget {
                 toCurrencyCode: converterCubit.toConversionValue.id,
               ),
               CurrencyHistoryItemDate(
-                date: conversionHistoryDate.conversionsDates[index],
+                date: conversionHistoryDate[index],
               )
             ],
           ),
@@ -48,7 +49,7 @@ class CurrencyHistoryItem extends StatelessWidget {
             height: 2.h,
           ),
           CurrencyHistoryItemConversionValues(
-            conversionValue: conversionHistoryDate.conversionsValues[index],
+            conversionValue: conversionHistoryValues[index],
             fromCurrencyCode: converterCubit.fromConversionValue.currencyId,
             toCurrencyCode: converterCubit.toConversionValue.currencyId,
           ),
