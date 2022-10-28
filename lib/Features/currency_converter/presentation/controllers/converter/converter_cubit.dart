@@ -84,7 +84,7 @@ class ConverterCubit extends Cubit<ConverterState> {
         currencies.addAll(currency.results.values);
         await locator<HiveService>()
             .storeCachedCurrenciesWithDate(currentDate, currencies);
-        locator<HiveService>().primitiveBox.put('saved_data',DateTime.now());
+        locator<HiveService>().primitiveBox.put('saved_data', DateTime.now());
         log('getAllCurrencies allCurrencies: ${currencies.first.id}');
       },
     );
@@ -108,7 +108,7 @@ class ConverterCubit extends Cubit<ConverterState> {
     _typedConversionValueController.add(1);
   }
 
-  Future<void> convertCurrencies({bool isFirstTimeCall=false}) async {
+  Future<void> convertCurrencies({bool isFirstTimeCall = false}) async {
     final result = await currenciesConversionUseCase(
       ConversionData(
         fromConversionValue.currencyId,
@@ -126,26 +126,30 @@ class ConverterCubit extends Cubit<ConverterState> {
         conversionsValues.addAll(conversion.conversionsValues);
         _conversionValueController
             .add(conversionsValues.first * typedConversionValue);
-        if(isFirstTimeCall){
+        if (isFirstTimeCall) {
           log('FirstTime');
-          locator<HiveService>().primitiveBox.put('default_conversion',conversionsValues.first);
+          locator<HiveService>()
+              .primitiveBox
+              .put('default_conversion', conversionsValues.first);
+        }
+        if (!isFirstTimeCall) {
+          emit(CurrencyLoaded(currencies));
         }
         log('convertCurrencies allCurrencies: ${conversion.conversionsValues.first}');
       },
     );
-    await getConversionHistory();
-
+    //await getConversionHistory();
   }
 
   Future<void> checkIfDefaultConversionValueCached() async {
-    if(locator<HiveService>().primitiveBox.containsKey('default_conversion')){
-      _conversionValueController
-          .add(locator<HiveService>().primitiveBox.get('default_conversion') * typedConversionValue);
-      await getConversionHistory();
-    }else{
+    if (locator<HiveService>().primitiveBox.containsKey('default_conversion')) {
+      _conversionValueController.add(
+          locator<HiveService>().primitiveBox.get('default_conversion') *
+              typedConversionValue);
+      //await getConversionHistory();
+    } else {
       convertCurrencies(isFirstTimeCall: true);
     }
-
   }
 
   Future<void> getConversionHistory() async {
@@ -221,7 +225,6 @@ class ConverterCubit extends Cubit<ConverterState> {
     locator<HiveService>().close();
     return super.close();
   }
-
 }
 
 ///Extension Methods
