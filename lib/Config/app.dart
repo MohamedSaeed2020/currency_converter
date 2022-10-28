@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-            locator<ConverterCubit>()..onInit(),
+            locator<ConverterCubit>()
+              ..onInit(),
           ),
           BlocProvider(
             create: (context) => locator<CurrencySelectionCubit>(),
@@ -35,24 +36,31 @@ class MyApp extends StatelessWidget {
             create: (context) => locator<ConversionHistoryCubit>(),
           ),
         ],
-        child: GetMaterialApp(
-          title: AppStrings.appName,
-          navigatorKey: NavigationService.navigationKey,
-          useInheritedMediaQuery: true,
-          debugShowCheckedModeBanner: false,
-          builder: (BuildContext context, Widget? child) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                textScaleFactor: 1.0,
-              ),
-              child: child!,
-            );
+        child: BlocListener<ConverterCubit, ConverterState>(
+          listener: (context, state) {
+            if(state is CurrencyLoaded){
+              ConversionHistoryCubit.get(context).onInit();
+            }
           },
-          theme: ThemeData(
-            fontFamily: fontFamily,
+          child: GetMaterialApp(
+            title: AppStrings.appName,
+            navigatorKey: NavigationService.navigationKey,
+            useInheritedMediaQuery: true,
+            debugShowCheckedModeBanner: false,
+            builder: (BuildContext context, Widget? child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaleFactor: 1.0,
+                ),
+                child: child!,
+              );
+            },
+            theme: ThemeData(
+              fontFamily: fontFamily,
+            ),
+            home: const HomeScreen(),
+            onGenerateRoute: generateRoute,
           ),
-          home: const HomeScreen(),
-          onGenerateRoute: generateRoute,
         ),
       );
     });

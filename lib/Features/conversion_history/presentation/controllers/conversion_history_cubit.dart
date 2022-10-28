@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:calculator_converter/Cores/services/hive_service.dart';
 import 'package:calculator_converter/Cores/services/navigation/service.dart';
@@ -9,8 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'conversion_history_state.dart';
 
 class ConversionHistoryCubit extends Cubit<ConversionHistoryState> {
-  ConversionHistoryCubit(this.conversionsHistoryUseCase)
+  ConversionHistoryCubit(this.conversionsHistoryUseCase,)
       : super(ConversionHistoryInitial());
+
 
   ///Variables
   ConversionsHistoryUseCase conversionsHistoryUseCase;
@@ -72,9 +74,9 @@ class ConversionHistoryCubit extends Cubit<ConversionHistoryState> {
       log('History Cached');
 
       final conversionValues = await locator<HiveService>()
-          .fetchCurrenciesHistoryWithKey('${key}_values');
+          .fetchCurrenciesHistoryWithKey('${key}_values').toList().cast<num>();
       final conversionDates = await locator<HiveService>()
-          .fetchCurrenciesHistoryWithKey('${key}_dates');
+          .fetchCurrenciesHistoryWithKey('${key}_dates').toList().cast<String>();
       conversionsHistoryValues.addAll(conversionValues);
       conversionsHistoryDate.addAll(conversionDates);
       log('History Values Cached: $conversionsHistoryValues');
