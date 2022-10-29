@@ -31,39 +31,13 @@ class ConversionHistoryCubit extends Cubit<ConversionHistoryState> {
     try {
       await checkIsConversionHistoryCached();
       _checkEmittingState(
-          conversionsHistoryDate, conversionsHistoryValues, emit);
+          conversionsHistoryDate, conversionsHistoryValues);
     } on Exception catch (e) {
       emit(ConversionHistoryError());
       log('Exception during fetching conversion history details 😥 $e');
     }
   }
 
-  Future<void> getConversionsHistory(ConverterCubit converterCubit) async {
-    final result = await conversionsHistoryUseCase(
-      ConversionData(converterCubit.fromConversionValue.currencyId,
-          converterCubit.toConversionValue.currencyId),
-    );
-
-    result.fold(
-      (failure) {
-        log('getConversionsHistory failure: ${failure.errorMessage}');
-      },
-      (conversionHistory) async {
-        conversionsHistoryDate.addAll(
-            conversionHistory.conversionsHistoryData.first.conversionsDates);
-        conversionsHistoryValues.addAll(
-            conversionHistory.conversionsHistoryData.first.conversionsValues);
-        String key =
-            '${converterCubit.fromConversionValue.currencyId}_${converterCubit.toConversionValue.currencyId}';
-        locator<HiveService>()
-            .primitiveBox
-            .put('${key}_dates', List.of(conversionsHistoryDate));
-        locator<HiveService>()
-            .primitiveBox
-            .put('${key}_values', List.of(conversionsHistoryValues));
-      },
-    );
-  }
 
   Future<void> checkIsConversionHistoryCached() async {
     ConverterCubit converterCubit =
@@ -87,8 +61,36 @@ class ConversionHistoryCubit extends Cubit<ConversionHistoryState> {
     }
   }
 
+  Future<void> getConversionsHistory(ConverterCubit converterCubit) async {
+    final result = await conversionsHistoryUseCase(
+      ConversionData(converterCubit.fromConversionValue.currencyId,
+          converterCubit.toConversionValue.currencyId),
+    );
+
+    result.fold(
+          (failure) {
+        log('getConversionsHistory failure: ${failure.errorMessage}');
+      },
+          (conversionHistory) async {
+        conversionsHistoryDate.addAll(
+            conversionHistory.conversionsHistoryData.first.conversionsDates);
+        conversionsHistoryValues.addAll(
+            conversionHistory.conversionsHistoryData.first.conversionsValues);
+        String key =
+            '${converterCubit.fromConversionValue.currencyId}_${converterCubit.toConversionValue.currencyId}';
+        locator<HiveService>()
+            .primitiveBox
+            .put('${key}_dates', List.of(conversionsHistoryDate));
+        locator<HiveService>()
+            .primitiveBox
+            .put('${key}_values', List.of(conversionsHistoryValues));
+      },
+    );
+  }
+
+
   void _checkEmittingState(
-      List<String> historyDate, List<num> historyValues, emit) {
+      List<String> historyDate, List<num> historyValues) {
     if (historyDate.isEmpty || historyValues.isEmpty) {
       emit(ConversionHistoryError());
       log('Cannot fetch conversion history 😥');

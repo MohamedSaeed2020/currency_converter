@@ -15,3 +15,5 @@ class CurrencyLoaded extends ConverterState {
 }
 
 class CurrencyError extends ConverterState {}
+
+class ConversionsLoaded extends ConverterState {}

@@ -1,10 +1,8 @@
 import 'dart:developer';
 import 'package:calculator_converter/Cores/Helpers/extensions/math_extensions.dart';
 import 'package:calculator_converter/Cores/services/hive_service.dart';
-import 'package:calculator_converter/Cores/services/navigation/service.dart';
 import 'package:calculator_converter/Cores/services/services_locator.dart';
 import 'package:calculator_converter/Cores/use_case/base_use_case.dart';
-import 'package:calculator_converter/Features/conversion_history/presentation/controllers/conversion_history_cubit.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/entities/currency.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/use_cases/all_countries_currencies_use_case.dart';
 import 'package:calculator_converter/Features/currency_converter/domain/use_cases/currencies_conversion_use_case.dart';
@@ -108,7 +106,23 @@ class ConverterCubit extends Cubit<ConverterState> {
     _typedConversionValueController.add(1);
   }
 
-  Future<void> convertCurrencies({bool isFirstTimeCall = false}) async {
+  Future<void> checkIfDefaultConversionValueCached() async {
+    if (locator<HiveService>().primitiveBox.containsKey(
+        '${fromConversionValue.currencyId}_${toConversionValue.currencyId}')) {
+      log('Conversion Cached:');
+      _conversionValueController.add(
+        locator<HiveService>().primitiveBox.get(
+                '${fromConversionValue.currencyId}_${toConversionValue.currencyId}') *
+            typedConversionValue,
+      );
+    } else {
+      log('Conversion Online:');
+      convertCurrencies();
+    }
+    emit(ConversionsLoaded());
+  }
+
+  Future<void> convertCurrencies() async {
     final result = await currenciesConversionUseCase(
       ConversionData(
         fromConversionValue.currencyId,
@@ -126,46 +140,27 @@ class ConverterCubit extends Cubit<ConverterState> {
         conversionsValues.addAll(conversion.conversionsValues);
         _conversionValueController
             .add(conversionsValues.first * typedConversionValue);
-        if (isFirstTimeCall) {
-          log('FirstTime');
-          locator<HiveService>()
-              .primitiveBox
-              .put('default_conversion', conversionsValues.first);
-        }
-        if (!isFirstTimeCall) {
-          emit(CurrencyLoaded(currencies));
-        }
+
+        locator<HiveService>().primitiveBox.put(
+              '${fromConversionValue.currencyId}_${toConversionValue.currencyId}',
+              conversionsValues.first,
+            );
+
+        //
+        emit(CurrencyLoaded(currencies));
         log('convertCurrencies allCurrencies: ${conversion.conversionsValues.first}');
       },
     );
-    //await getConversionHistory();
-  }
-
-  Future<void> checkIfDefaultConversionValueCached() async {
-    if (locator<HiveService>().primitiveBox.containsKey('default_conversion')) {
-      _conversionValueController.add(
-          locator<HiveService>().primitiveBox.get('default_conversion') *
-              typedConversionValue);
-      //await getConversionHistory();
-    } else {
-      convertCurrencies(isFirstTimeCall: true);
-    }
-  }
-
-  Future<void> getConversionHistory() async {
-    ConversionHistoryCubit conversionHistoryCubit = ConversionHistoryCubit.get(
-        NavigationService.navigationKey.currentContext);
-    await conversionHistoryCubit.onInit();
   }
 
   Future<void> refreshFromConversionValueWithIndex(int value) async {
     _fromConversionValueIndicatorController.add(currencies.elementAt(value));
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   Future<void> refreshToConversionValueWithIndex(int value) async {
     _toConversionValueIndicatorController.add(currencies.elementAt(value));
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   Future<void> exchangeCurrencyConversions() async {
@@ -176,14 +171,14 @@ class ConverterCubit extends Cubit<ConverterState> {
 
     _typedConversionValueController.add(conversionValue);
     _conversionValueController.add(typedValue);
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   ///Keyboard Methods
   Future<void> insertToTypedValueRate(int value, BuildContext context) async {
     if (typedConversionValue < maxValueLimit) {
       _typedConversionValueController.add((typedConversionValue * 10) + value);
-      await convertCurrencies();
+      await checkIfDefaultConversionValueCached();
     } else {
       showExceedInputLimitInfoDialog(
         context: context,
@@ -207,12 +202,12 @@ class ConverterCubit extends Cubit<ConverterState> {
     } else {
       _typedConversionValueController.add(0);
     }
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   Future<void> deleteAllDigitsFromTypedValue() async {
     _typedConversionValueController.add(0);
-    await convertCurrencies();
+    await checkIfDefaultConversionValueCached();
   }
 
   @override

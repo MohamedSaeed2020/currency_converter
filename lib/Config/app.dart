@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocListener<ConverterCubit, ConverterState>(
           listener: (context, state) {
-            if(state is CurrencyLoaded){
+            if(state is ConversionsLoaded){
               ConversionHistoryCubit.get(context).onInit();
             }
           },
