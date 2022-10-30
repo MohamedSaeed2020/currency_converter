@@ -15,9 +15,14 @@ abstract class BaseRemoteConverterDataSource {
 }
 
 class RemoteConverterDataSource extends BaseRemoteConverterDataSource {
+  final DioHelper dioHelper;
+
+
+  RemoteConverterDataSource(this.dioHelper);
+
   @override
   Future<CountryCurrencyModel> getAllCountriesCurrencies() async {
-    final Response response = await DioHelper.getData(
+    final Response response = await dioHelper.getData(
       url: ApiEndPoints.allCountriesCurrenciesEndPoint,
       query: {
         'apiKey': ApiConstants.apiKey,
@@ -34,7 +39,7 @@ class RemoteConverterDataSource extends BaseRemoteConverterDataSource {
   @override
   Future<CurrencyConversionModel> getCurrenciesConversions(
       {required String fromCurrency, required String toCurrency}) async {
-    final Response response = await DioHelper.getData(
+    final Response response = await dioHelper.getData(
       url: ApiEndPoints.convertCurrenciesEndPoint,
       query: {
         'apiKey': ApiConstants.apiKey,

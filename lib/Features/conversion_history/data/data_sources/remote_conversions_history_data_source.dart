@@ -15,10 +15,15 @@ abstract class BaseRemoteConversionsHistoryDataSource {
 
 class RemoteConversionsHistoryDataSource
     extends BaseRemoteConversionsHistoryDataSource {
+
+  final DioHelper dioHelper;
+
+
+  RemoteConversionsHistoryDataSource(this.dioHelper);
   @override
   Future<ConversionHistoryModel> getConversionsHistory(
       {required String fromCurrency, required String toCurrency}) async {
-    final Response response = await DioHelper.getData(
+    final Response response = await dioHelper.getData(
       url: ApiEndPoints.convertCurrenciesEndPoint,
       query: {
         'apiKey': ApiConstants.apiKey,
