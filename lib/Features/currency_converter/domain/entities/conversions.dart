@@ -7,6 +7,7 @@ class CurrencyConversion extends Equatable {
   const CurrencyConversion(
       {required this.countriesIds, required this.conversionsValues});
 
+
   @override
   List<Object> get props => [countriesIds, conversionsValues];
 }

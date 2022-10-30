@@ -10,4 +10,6 @@ class CountryCurrencyModel extends CountryCurrency {
         results: Map.from(json["results"]).map((k, v) =>
             MapEntry<String, CurrencyModel>(k, CurrencyModel.fromJson(v))),
       );
+
+
 }

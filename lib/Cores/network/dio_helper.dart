@@ -2,9 +2,9 @@ import 'package:calculator_converter/Cores/network/api_constants.dart';
 import 'package:dio/dio.dart';
 
 class DioHelper {
-  static late Dio dio;
+   late Dio dio;
 
-  static init() {
+  void init() {
     dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
@@ -13,7 +13,7 @@ class DioHelper {
     );
   }
 
-  static Future<Response> getData({
+   Future<Response> getData({
     required String url,
     Map<String, dynamic>? query,
   }) async {

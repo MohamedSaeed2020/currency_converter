@@ -11,7 +11,7 @@ class AppConfigs {
     WidgetsFlutterBinding.ensureInitialized();
     ServicesLocator.init();
     await locator<HiveService>().initHiveService();
-    DioHelper.init();
+    locator<DioHelper>().init();
     AppHelpers.checkTimeToDeleteCachedData();
     AppHelpers.makeAppInPortraitModeOnly();
     AppHelpers.makeStatusBarColorTransparent();

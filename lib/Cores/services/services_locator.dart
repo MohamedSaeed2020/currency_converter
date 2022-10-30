@@ -1,3 +1,4 @@
+import 'package:calculator_converter/Cores/network/dio_helper.dart';
 import 'package:calculator_converter/Cores/services/hive_service.dart';
 import 'package:calculator_converter/Cores/services/navigation/service.dart';
 import 'package:calculator_converter/Features/conversion_history/data/data_sources/remote_conversions_history_data_source.dart';
@@ -29,11 +30,11 @@ class ServicesLocator {
 
     //Conversion Feature
     locator.registerLazySingleton<BaseRemoteConverterDataSource>(
-        () => RemoteConverterDataSource());
+        () => RemoteConverterDataSource(locator()));
 
     //Conversion History Feature
     locator.registerLazySingleton<BaseRemoteConversionsHistoryDataSource>(
-        () => RemoteConversionsHistoryDataSource());
+        () => RemoteConversionsHistoryDataSource(locator()));
 
     ///Repository Injection
 
@@ -60,6 +61,9 @@ class ServicesLocator {
     );
     locator.registerLazySingleton<HiveService>(
       () => HiveService(),
+    );
+    locator.registerLazySingleton<DioHelper>(
+          () => DioHelper(),
     );
   }
 }
