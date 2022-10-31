@@ -12,4 +12,12 @@ class CurrencyConversionModel extends CurrencyConversion {
       conversionsValues: List<num>.from(json.values),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {};
+    for (int i = 0; i < countriesIds.length; i++) {
+      json[countriesIds[i]]=conversionsValues[i];
+    }
+    return json;
+  }
 }

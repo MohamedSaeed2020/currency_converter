@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:calculator_converter/Cores/network/api_constants.dart';
 import 'package:calculator_converter/Cores/network/api_end_points.dart';
 import 'package:calculator_converter/Cores/network/dio_helper.dart';
@@ -22,7 +24,8 @@ void main() {
     mockDioHelper = MockDioHelper();
     remoteConverterDataSource = RemoteConverterDataSource(mockDioHelper);
   });
-
+  final mapResult = RemoteConverterDataSourceConstants.conversions.toJson();
+  log('Map From Json: $mapResult');
   group(
       'Checking that all functionality of  getAllCountriesCurrencies is working as expected',
       () {
@@ -31,7 +34,7 @@ void main() {
         () async {
       //Arrange
       CountryCurrencyModel currencies =
-          RemoteConverterDataSourceConstants.currencies;
+          RemoteConverterDataSourceConstants.currenciesWithId;
       final mapResult = currencies.toJson();
       when(mockDioHelper
           .getData(url: ApiEndPoints.allCountriesCurrenciesEndPoint, query: {
@@ -94,7 +97,7 @@ void main() {
       //Arrange
       CurrencyConversionModel conversions =
           RemoteConverterDataSourceConstants.conversions;
-      const mapResult = RemoteConverterDataSourceConstants.conversionsMap;
+      final mapResult = conversions.toJson();
 
       when(mockDioHelper
           .getData(url: ApiEndPoints.convertCurrenciesEndPoint, query: {
