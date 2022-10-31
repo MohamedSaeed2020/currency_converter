@@ -92,7 +92,7 @@ void main() {
     const String fromCurrency = 'USD';
     const String toCurrency = 'EGP';
     test(
-        ' Testing that getCurrenciesConversions method return all countries currencies with status code 200',
+        ' Testing that getCurrenciesConversions method return all currencies conversions with status code 200',
         () async {
       //Arrange
       CurrencyConversionModel conversions =
