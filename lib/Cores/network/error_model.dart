@@ -16,6 +16,13 @@ class ErrorModel extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "status": statusCode,
+      "error": errorMessage,
+    };
+  }
+
   @override
   List<Object> get props => [statusCode, errorMessage];
 }
