@@ -6,10 +6,18 @@ class CountryCurrencyModel extends CountryCurrency {
     required super.results,
   });
 
-  factory CountryCurrencyModel.fromJson(Map<String, dynamic> json) => CountryCurrencyModel(
-        results: Map.from(json["results"]).map((k, v) =>
-            MapEntry<String, CurrencyModel>(k, CurrencyModel.fromJson(v))),
+  factory CountryCurrencyModel.fromJson(Map<String, dynamic> json) =>
+      CountryCurrencyModel(
+        results: Map.from(json["results"]).map(
+              (k, v) =>
+              MapEntry<String, CurrencyModel>(k, CurrencyModel.fromJson(v)),
+        ),
       );
 
-
+  Map<String, dynamic> toJson() {
+    return {
+      "results": Map.from(results)
+          .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+    };
+  }
 }

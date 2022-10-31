@@ -18,4 +18,15 @@ class CurrencyModel extends Currency {
         id: json["id"],
         name: json["name"],
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      "alpha3": alpha3,
+      "currencyId": currencyId,
+      "currencyName": currencyName,
+      "currencySymbol": currencySymbol,
+      "id": id,
+      "name": name,
+    };
+  }
 }
