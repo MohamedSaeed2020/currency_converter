@@ -57,10 +57,6 @@ void main() {
           RemoteConverterDataSourceConstants.remoteServerFailureModel;
       //Act
       final result = await converterRepository.getAllCountriesCurrencies();
-      late RemoteServerFailure leftResult;
-      result.fold((l) {
-        leftResult = l as RemoteServerFailure;
-      }, (r) {});
 
       //Assert
       expect(result, Left(remoteServerFailure));
@@ -103,10 +99,6 @@ void main() {
           RemoteConverterDataSourceConstants.remoteServerFailureModel;
       //Act
       final result = await converterRepository.getCurrenciesConversions(fromCurrency: fromCurrency, toCurrency: toCurrency);
-      late RemoteServerFailure leftResult;
-      result.fold((l) {
-        leftResult = l as RemoteServerFailure;
-      }, (r) {});
 
       //Assert
       expect(result, Left(remoteServerFailure));
