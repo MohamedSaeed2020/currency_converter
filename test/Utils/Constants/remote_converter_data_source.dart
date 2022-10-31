@@ -1,30 +1,12 @@
 import 'package:calculator_converter/Cores/network/error_model.dart';
 import 'package:calculator_converter/Cores/network/exception_mapper.dart';
+import 'package:calculator_converter/Cores/network/general_failure_model.dart';
 import 'package:calculator_converter/Features/currency_converter/data/models/conversions_model.dart';
 import 'package:calculator_converter/Features/currency_converter/data/models/country_currency_model.dart';
 import 'package:calculator_converter/Features/currency_converter/data/models/currency_model.dart';
-import 'package:calculator_converter/Features/currency_converter/domain/entities/country_currency.dart';
 
 class RemoteConverterDataSourceConstants {
   static const currenciesWithId = CountryCurrencyModel(results: {
-    'AF': CurrencyModel(
-      alpha3: 'AFG',
-      currencyId: 'AFN',
-      currencyName: 'Afghan afghani',
-      currencySymbol: '؋',
-      id: 'AF',
-      name: 'Afghanistan',
-    ),
-    'AI': CurrencyModel(
-      alpha3: 'AIA',
-      currencyId: 'XCD',
-      currencyName: 'East Caribbean dollar',
-      currencySymbol: '\$',
-      id: 'AI',
-      name: 'Anguilla',
-    ),
-  });
-  static const currencies = CountryCurrency(results: {
     'AF': CurrencyModel(
       alpha3: 'AFG',
       currencyId: 'AFN',
@@ -50,6 +32,9 @@ class RemoteConverterDataSourceConstants {
   static const errorModel =
       ErrorModel(statusCode: 400, errorMessage: 'an error occurred');
 
-  static const remoteServerErrorModel =
+  static const remoteServerExceptionModel =
       RemoteServerException(errorModel: errorModel);
+  static const remoteServerFailureModel =
+  RemoteServerFailure('an error occurred');
+
 }
